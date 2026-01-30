@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cramly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .register-btn {
+            background: none;
+            border: none;
+            font-family: 'Comfortaa', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            color: #000000;
+        }
+
+        .login-btn {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-family: 'Comfortaa', cursive;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .hero-section {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            color: #666666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 8px;
+            font-family: 'Comfortaa', cursive;
+            font-size: 18px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 500px;
+            background-color: #f5f5f5;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        footer {
+            max-width: 1200px;
+            margin: 80px auto 40px;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-left {
+            font-size: 14px;
+            color: #666666;
+            max-width: 200px;
+            line-height: 1.6;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            width: 60px;
+            height: 60px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #999999;
+            text-align: center;
+            max-width: 180px;
+            line-height: 1.5;
+        }
+
+        .footer-right {
+            font-size: 14px;
+            color: #999999;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo-text {
+                font-size: 32px;
+            }
+
+            .auth-buttons {
+                gap: 15px;
+            }
+
+            .register-btn,
+            .login-btn {
+                font-size: 14px;
+            }
+
+            .login-btn {
+                padding: 10px 20px;
+            }
+
+            main {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
+
+            .start-btn {
+                padding: 15px 30px;
+                font-size: 16px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-image {
+                height: 300px;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+                text-align: center;
+                margin: 60px auto 30px;
+                padding: 0 20px;
+            }
+
+            .footer-left,
+            .footer-text {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .logo-text {
+                font-size: 28px;
+            }
+
+            .hero-image {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo-section">
+        <div class="logo">
+            <!-- Вставьте путь к логотипу моржа -->
+            <img src="/images/BOB.png" alt="Cramly Logo" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div class="logo-text">Cramly</div>
+    </div>
+    <div class="auth-buttons">
+        <button class="register-btn">Зарегистрироваться</button>
+        <button class="login-btn">Войти</button>
+    </div>
+</header>
+
+<main>
+    <section class="hero-section">
+        <h1>Голова пухнет от знаний?</h1>
+        <p class="subtitle">Изучай материал при помощи наших интерактивных карточек,<br>используй в учёбе и готовься к экзаменам!</p>
+        <button class="start-btn">Начать учиться!</button>
+    </section>
+
+    <div class="hero-image">
+        <!-- Вставьте путь к главному изображению -->
+        <img src="/images/BOBWIFE.jpg" alt="Учебная атмосфера">
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left">
+        Жоска лагает и ничего не работает? Настучать по голове разрабу "тык".
+    </div>
+    <div class="footer-center">
+        <div class="footer-logo">
+            <!-- Вставьте путь к логотипу моржа -->
+            <img src="/images/BOB.png" alt="Cramly Logo" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <p class="footer-text">Ничьи права не защищены. У вас нет прав.</p>
+    </div>
+    <div class="footer-right">
+        -spaceee<br>2025<br>❤️
+    </div>
+</footer>
+</body>
+</html>

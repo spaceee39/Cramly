@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои модули - Cramly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-family: 'Comfortaa', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .page-title {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            color: #666666;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .module-card {
+            background-color: #e8e8e8;
+            border-radius: 20px;
+            padding: 40px 30px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .module-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .module-count {
+            font-size: 14px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        footer {
+            max-width: 1200px;
+            margin: 80px auto 40px;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-left {
+            font-size: 14px;
+            color: #666666;
+            max-width: 200px;
+            line-height: 1.6;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            width: 60px;
+            height: 60px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+
+        .footer-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #999999;
+            text-align: center;
+            max-width: 180px;
+            line-height: 1.5;
+        }
+
+        .footer-right {
+            font-size: 14px;
+            color: #999999;
+        }
+
+        @media (max-width: 1024px) {
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo-text {
+                font-size: 32px;
+            }
+
+            .nav-buttons {
+                gap: 20px;
+            }
+
+            .nav-btn {
+                font-size: 14px;
+            }
+
+            main {
+                padding: 40px 20px;
+            }
+
+            .page-title {
+                font-size: 36px;
+                margin-bottom: 15px;
+            }
+
+            .page-subtitle {
+                font-size: 16px;
+                margin-bottom: 40px;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .module-card {
+                padding: 30px 20px;
+                min-height: 150px;
+            }
+
+            .module-title {
+                font-size: 20px;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+                text-align: center;
+                margin: 60px auto 30px;
+                padding: 0 20px;
+            }
+
+            .footer-left,
+            .footer-text {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 28px;
+            }
+
+            .logo-text {
+                font-size: 28px;
+            }
+
+            .module-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo-section">
+        <div class="logo">
+            <img src="images/BOB.png" alt="Cramly Logo">
+        </div>
+        <div class="logo-text">Cramly</div>
+    </div>
+    <div class="nav-buttons">
+        <a href="#" class="nav-btn">Мои модули</a>
+        <a href="#" class="nav-btn">Профиль</a>
+    </div>
+</header>
+
+<main>
+    <h1 class="page-title">Ваши модули</h1>
+    <p class="page-subtitle">Выберите тему или составьте модуль для обучения!</p>
+
+    <div class="modules-grid">
+        <!-- Пример модуля 1 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 2 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 3 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 4 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 5 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 6 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 7 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 8 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+
+        <!-- Пример модуля 9 -->
+        <div class="module-card">
+            <div class="module-title">Название модуля</div>
+            <div class="module-count">*Кол-во карточек*</div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left">
+        Жюска хавает и ничего не работает? Наступить по голове разрабу "пуут".
+    </div>
+    <div class="footer-center">
+        <div class="footer-logo">
+            <img src="images/BOB.png" alt="Cramly Logo">
+        </div>
+        <p class="footer-text">Ничьи права не защищены. У вас нет прав.</p>
+    </div>
+    <div class="footer-right">
+        ·spaceee<br>2025
+    </div>
+</footer>
+</body>
+</html>
