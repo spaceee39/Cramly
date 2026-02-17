@@ -14,19 +14,35 @@ public class Module {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
+    private long id;
 
     @Column(name = "name")
     @NotBlank(message = "Поле не должно быть пустым")
-    String name;
+    private String name;
 
     @Column(name = "description")
-    String description;
+    private String description;
 
-    @OneToMany(mappedBy = "module",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
+    @Column(name = "author")
+    private String author;
+
+    public enum Status{
+        PUBLIC, PRIVATE
+    }
+
+    @Column(name="status")
+    private Status status;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "cardslist",
+            joinColumns = @JoinColumn(name = "module_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_id")
+    )
     List<Card> cardList = new ArrayList<>();
+
+    @Column(name = "сount")
+    private int cardCount;
 
 }

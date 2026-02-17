@@ -21,7 +21,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     @NotBlank(message = "Имя пользователя не может быть пустым")
     @Size(min = 5, message = "Имя пользователя должно содержать не менее 5 символов")
     private String username;
@@ -34,9 +34,21 @@ public class User implements UserDetails {
     @Transient
     private String confirmpassword;
 
-    @OneToMany
-    private Set<Role> roles = new HashSet();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usersModules",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "module_id")
+    )
+    Set<Module> modules = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,5 +63,9 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public void addOneModule(Module module){
+        modules.add(module);
     }
 }

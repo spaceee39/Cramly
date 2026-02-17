@@ -1,6 +1,6 @@
 package com.example.demo.Model;
 
-import com.example.demo.Repository.ModuleRepository;
+import com.example.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -8,12 +8,15 @@ import java.util.List;
 
 
 public class MainPage {
-    List<Module> modules = new ArrayList<>();
 
     @Autowired
-    ModuleRepository moduleRepository;
+    UserRepository userRepository;
+
+    List<Module> modules = new ArrayList<>();
 
     public MainPage(String username){
-        modules = moduleRepository.findByName(username);
+        User user = userRepository.findByUsername(username);
+        modules = (List<Module>) user.getModules();
+
     }
 }

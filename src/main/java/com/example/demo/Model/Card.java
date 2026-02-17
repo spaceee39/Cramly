@@ -12,10 +12,6 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "module_id")
-    private Module module;
-
     @Column(name = "theme")
     private String theme;
 

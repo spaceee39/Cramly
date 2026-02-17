@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Cramly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive;
+            background-color: #ffffff;
+            color: #000000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-family: 'Comfortaa', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .login-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            font-size: 16px;
+            font-weight: 400;
+            color: #666666;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .form-input {
+            font-family: 'Comfortaa', cursive;
+            font-size: 16px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #ffffff;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #000000;
+        }
+
+        .form-input.error {
+            border-color: #ff4444;
+        }
+
+        .error-message {
+            font-size: 13px;
+            color: #ff4444;
+            margin-top: -15px;
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -10px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            font-size: 14px;
+            color: #000000;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .forgot-password:hover {
+            opacity: 0.7;
+        }
+
+        .submit-btn {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 8px;
+            font-family: 'Comfortaa', cursive;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #333333;
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+            color: #666666;
+        }
+
+        .register-link a {
+            color: #000000;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .register-link a:hover {
+            opacity: 0.7;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .alert-error {
+            background-color: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+        }
+
+        .alert-success {
+            background-color: #efe;
+            border: 1px solid #cfc;
+            color: #3c3;
+        }
+
+        footer {
+            max-width: 1200px;
+            margin: 40px auto 40px;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+        }
+
+        .footer-left {
+            font-size: 14px;
+            color: #666666;
+            max-width: 200px;
+            line-height: 1.6;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            width: 60px;
+            height: 60px;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+
+        .footer-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #999999;
+            text-align: center;
+            max-width: 180px;
+            line-height: 1.5;
+        }
+
+        .footer-right {
+            font-size: 14px;
+            color: #999999;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo-text {
+                font-size: 32px;
+            }
+
+            .back-btn {
+                font-size: 14px;
+            }
+
+            main {
+                padding: 40px 20px;
+            }
+
+            .login-title {
+                font-size: 36px;
+                margin-bottom: 12px;
+            }
+
+            .login-subtitle {
+                font-size: 14px;
+                margin-bottom: 30px;
+            }
+
+            .form-label {
+                font-size: 14px;
+            }
+
+            .form-input {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .submit-btn {
+                padding: 15px 30px;
+                font-size: 16px;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+                text-align: center;
+                margin: 30px auto 30px;
+                padding: 0 20px;
+            }
+
+            .footer-left,
+            .footer-text {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-title {
+                font-size: 28px;
+            }
+
+            .logo-text {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a href="/" class="logo-section">
+        <div class="logo">
+            <img src="images/BOB.png" alt="Cramly Logo">
+        </div>
+        <div class="logo-text">Cramly</div>
+    </a>
+    <a href="/" class="back-btn">← Назад</a>
+</header>
+
+<main>
+    <div class="login-container">
+        <h1 class="login-title">Вход</h1>
+        <p class="login-subtitle">С возвращением! Войдите в свой аккаунт</p>
+
+        <!-- Общее сообщение об ошибке -->
+        <div class="alert alert-error" th:if="${error}" th:text="${error}"></div>
+
+        <!-- Сообщение об успешной регистрации -->
+        <div class="alert alert-success" th:if="${param.registered}">
+            Регистрация прошла успешно! Теперь вы можете войти.
+        </div>
+
+        <form class="login-form" id="loginForm" th:action="@{/login}" th:object="${user}" method="POST">
+            <div class="form-group">
+                <label class="form-label" for="username">Имя пользователя</label>
+                <input
+                        type="text"
+                        id="username"
+                        th:field="*{username}"
+                        class="form-input"
+                        placeholder="Введите имя пользователя"
+                        required
+                >
+                <div class="error-message" id="usernameError">Пожалуйста, введите имя пользователя</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Пароль</label>
+                <input
+                        type="password"
+                        id="password"
+                        th:field="*{password}"
+                        class="form-input"
+                        placeholder="Введите пароль"
+                        required
+                >
+                <div class="error-message" id="passwordError">Пожалуйста, введите пароль</div>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember-me" id="rememberMe">
+                    <span>Запомнить меня</span>
+                </label>
+                <a href="#" class="forgot-password">Забыли пароль?</a>
+            </div>
+
+            <button type="submit" class="submit-btn">Войти</button>
+
+            <div class="register-link">
+                Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left">
+        Жоска лагает и ничего не работает? Настучать по голове разрабу "тык".
+    </div>
+    <div class="footer-center">
+        <div class="footer-logo">
+            <img src="images/BOB.png" alt="Cramly Logo">
+        </div>
+        <p class="footer-text">Ничьи права не защищены. У вас нет прав.</p>
+    </div>
+    <div class="footer-right">
+        -spaceee<br>2025<br>❤️
+    </div>
+</footer>
+
+<script>
+    const form = document.getElementById('loginForm');
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+
+    const usernameError = document.getElementById('usernameError');
+    const passwordError = document.getElementById('passwordError');
+
+    // Валидация имени пользователя
+    username.addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+            this.classList.add('error');
+            usernameError.classList.add('visible');
+        } else {
+            this.classList.remove('error');
+            usernameError.classList.remove('visible');
+        }
+    });
+
+    // Валидация пароля
+    password.addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+            this.classList.add('error');
+            passwordError.classList.add('visible');
+        } else {
+            this.classList.remove('error');
+            passwordError.classList.remove('visible');
+        }
+    });
+
+    // Проверка при отправке формы
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        // Проверка имени пользователя
+        if (username.value.trim() === '') {
+            username.classList.add('error');
+            usernameError.classList.add('visible');
+            isValid = false;
+        }
+
+        // Проверка пароля
+        if (password.value.trim() === '') {
+            password.classList.add('error');
+            passwordError.classList.add('visible');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+    // Убираем ошибку при вводе
+    [username, password].forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('error');
+            const errorId = this.id + 'Error';
+            document.getElementById(errorId).classList.remove('visible');
+        });
+    });
+</script>
+</body>
+</html>
