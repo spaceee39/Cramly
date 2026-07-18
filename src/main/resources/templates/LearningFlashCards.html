@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${module.name} + ' - Изучение - Cramly'">Изучение - Cramly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comfortaa', cursive;
+            background-color: #ffffff;
+            color: #000000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── HEADER (совпадает со стилем страницы модуля) ── */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-family: 'Comfortaa', cursive;
+            font-size: 15px;
+            cursor: pointer;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* ── MAIN ── */
+        main {
+            flex: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 50px 40px 80px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── ВЕРХНЯЯ ПАНЕЛЬ: назад / название / счётчик ── */
+        .study-topbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 16px;
+        }
+
+        .back-link {
+            font-size: 14px;
+            color: #888888;
+            text-decoration: none;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-link:hover {
+            color: #000000;
+        }
+
+        .study-title {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .study-counter {
+            font-size: 14px;
+            color: #888888;
+            white-space: nowrap;
+        }
+
+        /* ── ПРОГРЕСС-БАР ── */
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #000000;
+            border-radius: 10px;
+            transition: width 0.35s ease;
+        }
+
+        /* ── ИНДИКАТОРЫ ЗНАЮ / НЕ ЗНАЮ ── */
+        .status-counters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .status-counter {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #888888;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .status-dot.known {
+            background-color: #2e7d32;
+        }
+
+        .status-dot.unknown {
+            background-color: #c62828;
+        }
+
+        /* ── КАРТОЧКА ── */
+        .flashcard-stage {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            perspective: 1400px;
+            margin-bottom: 28px;
+        }
+
+        .flashcard {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            height: 320px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.35s ease;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.swipe-know {
+            transform: translateX(140%) rotate(12deg);
+            opacity: 0;
+        }
+
+        .flashcard.swipe-know.flipped {
+            transform: translateX(140%) rotate(12deg) rotateY(180deg);
+        }
+
+        .flashcard.swipe-unknown {
+            transform: translateX(-140%) rotate(-12deg);
+            opacity: 0;
+        }
+
+        .flashcard.swipe-unknown.flipped {
+            transform: translateX(-140%) rotate(-12deg) rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .card-face.front {
+            background-color: #ffffff;
+            border: 2px solid #f0f0f0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-face.back {
+            background-color: #000000;
+            color: #ffffff;
+            transform: rotateY(180deg);
+        }
+
+        .card-face-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .card-face.front .card-face-label {
+            color: #bbbbbb;
+        }
+
+        .card-face.back .card-face-label {
+            color: #666666;
+        }
+
+        .card-face-text {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            word-break: break-word;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .card-face.back .card-face-text {
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        .flip-hint {
+            font-size: 12px;
+            color: #aaaaaa;
+            margin-bottom: 28px;
+        }
+
+        /* ── КНОПКИ ОЦЕНКИ ── */
+        .study-actions {
+            display: flex;
+            gap: 14px;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .study-btn {
+            flex: 1;
+            font-family: 'Comfortaa', cursive;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .study-btn.unknown-btn {
+            background-color: #fdecea;
+            color: #c62828;
+        }
+
+        .study-btn.unknown-btn:hover {
+            border-color: #c62828;
+        }
+
+        .study-btn.known-btn {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .study-btn.known-btn:hover {
+            border-color: #2e7d32;
+        }
+
+        .keys-hint {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #bbbbbb;
+            text-align: center;
+        }
+
+        /* ── ФИНАЛЬНЫЙ ЭКРАН ── */
+        .summary-screen {
+            display: none;
+            width: 100%;
+            max-width: 560px;
+            text-align: center;
+            padding: 50px 10px 10px;
+        }
+
+        .summary-screen.active {
+            display: block;
+        }
+
+        .summary-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .summary-subtitle {
+            font-size: 14px;
+            color: #888888;
+            margin-bottom: 36px;
+        }
+
+        .summary-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .summary-stat {
+            flex: 1;
+            padding: 24px 10px;
+            border-radius: 16px;
+        }
+
+        .summary-stat.known {
+            background-color: #e8f5e9;
+        }
+
+        .summary-stat.unknown {
+            background-color: #fdecea;
+        }
+
+        .summary-stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .summary-stat.known .summary-stat-number {
+            color: #2e7d32;
+        }
+
+        .summary-stat.unknown .summary-stat-number {
+            color: #c62828;
+        }
+
+        .summary-stat-label {
+            font-size: 13px;
+            color: #666666;
+        }
+
+        .summary-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            font-family: 'Comfortaa', cursive;
+            font-size: 14px;
+            padding: 14px 26px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #222222;
+        }
+
+        .btn-secondary {
+            background-color: #f2f2f2;
+            color: #000000;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e4e4e4;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* ── ПУСТОЕ СОСТОЯНИЕ ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #f5f5f5;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .empty-state-text {
+            font-size: 15px;
+            color: #888888;
+            margin-bottom: 20px;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid #e8e8e8;
+            padding: 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            font-size: 13px;
+            color: #aaaaaa;
+            max-width: 220px;
+            line-height: 1.6;
+        }
+
+        .footer-left a {
+            color: #aaaaaa;
+            text-decoration: underline;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .footer-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #bbbbbb;
+            text-align: center;
+            max-width: 180px;
+            line-height: 1.5;
+        }
+
+        .footer-right {
+            font-size: 13px;
+            color: #aaaaaa;
+            text-align: right;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 14px 20px;
+            }
+
+            main {
+                padding: 30px 20px 60px;
+            }
+
+            .flashcard {
+                height: 280px;
+            }
+
+            .card-face-text {
+                font-size: 19px;
+            }
+
+            .study-actions {
+                flex-direction: column;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+                text-align: center;
+                padding: 30px 20px;
+            }
+
+            .footer-left,
+            .footer-right {
+                text-align: center;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/home">
+        <div class="logo">
+            <img src="/images/BOB.png" alt="Cramly Logo">
+        </div>
+    </a>
+    <div class="nav-buttons">
+        <a href="/home" class="nav-btn">Мои модули</a>
+        <a href="/profile" class="nav-btn">Профиль</a>
+    </div>
+</header>
+
+<main>
+
+    <!-- ══════ ПУСТОЕ СОСТОЯНИЕ, ЕСЛИ В МОДУЛЕ НЕТ КАРТОЧЕК ══════ -->
+    <div class="empty-state" th:if="${module.cardList == null || module.cardList.isEmpty()}">
+        <p class="empty-state-text">В этом модуле пока нет карточек для изучения</p>
+        <a th:href="@{/module/{id}(id=${module.id})}" class="btn btn-primary">Вернуться к модулю</a>
+    </div>
+
+    <!-- ══════ РЕЖИМ ИЗУЧЕНИЯ ══════ -->
+    <div id="studyWrapper" th:if="${module.cardList != null && !module.cardList.isEmpty()}" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+
+        <div class="study-topbar">
+            <a th:href="@{/module/{id}(id=${module.id})}" class="back-link">← К модулю</a>
+            <div class="study-title" th:text="${module.name}">Название модуля</div>
+            <div class="study-counter" id="studyCounter">1 / 1</div>
+        </div>
+
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="status-counters">
+            <div class="status-counter">
+                <span class="status-dot known"></span>
+                <span>Знаю: <span id="knownCount">0</span></span>
+            </div>
+            <div class="status-counter">
+                <span class="status-dot unknown"></span>
+                <span>Не знаю: <span id="unknownCount">0</span></span>
+            </div>
+        </div>
+
+        <!-- КАРТОЧКА -->
+        <div id="cardArea" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <div class="flashcard-stage">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="card-face front">
+                        <div class="card-face-label">Термин</div>
+                        <div class="card-face-text" id="cardFrontText">—</div>
+                    </div>
+                    <div class="card-face back">
+                        <div class="card-face-label">Определение</div>
+                        <div class="card-face-text" id="cardBackText">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="flip-hint">Нажми на карточку или пробел, чтобы перевернуть</p>
+
+            <div class="study-actions">
+                <button type="button" class="study-btn unknown-btn" onclick="markCard(false)">
+                    😕 Не знаю
+                </button>
+                <button type="button" class="study-btn known-btn" onclick="markCard(true)">
+                    😊 Знаю
+                </button>
+            </div>
+
+            <p class="keys-hint">← не знаю&nbsp;&nbsp;·&nbsp;&nbsp;пробел — перевернуть&nbsp;&nbsp;·&nbsp;&nbsp;знаю →</p>
+        </div>
+
+        <!-- ФИНАЛЬНЫЙ ЭКРАН -->
+        <div class="summary-screen" id="summaryScreen">
+            <div class="summary-title">Модуль пройден 🎉</div>
+            <p class="summary-subtitle">Вот как ты справился в этом заходе</p>
+
+            <div class="summary-stats">
+                <div class="summary-stat known">
+                    <div class="summary-stat-number" id="summaryKnown">0</div>
+                    <div class="summary-stat-label">Знаю</div>
+                </div>
+                <div class="summary-stat unknown">
+                    <div class="summary-stat-number" id="summaryUnknown">0</div>
+                    <div class="summary-stat-label">Не знаю</div>
+                </div>
+            </div>
+
+            <div class="summary-actions">
+                <button type="button" class="btn btn-primary" id="repeatUnknownBtn" onclick="repeatUnknown()">
+                    Повторить незнакомые
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="finishStudy()">
+                    Завершить и сохранить результат
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    <div class="footer-left">
+        Жоска лагает и ничего не работает? Настучать по голове разрабу <a href="#">«тык»</a>.
+    </div>
+    <div class="footer-center">
+        <div class="footer-logo">
+            <img src="/images/BOB.png" alt="Cramly Logo">
+        </div>
+        <p class="footer-text">Ничьи права не защищены. У вас нет прав.</p>
+    </div>
+    <div class="footer-right">
+        -spaceee<br>2025<br>❤️
+    </div>
+</footer>
+
+<script th:inline="javascript">
+    /*
+     * Карточки модуля приходят напрямую из module.cardList (Thymeleaf сериализует
+     * List<Card> в JSON). Нужны только id / theme / text — остальные поля
+     * (owner, createdAt, cardStatus) в разметке не используются.
+     */
+    const rawCards = /*[[${module.cardList.![{'id': id, 'theme': theme, 'text': text}]}]]*/ [];
+    const moduleId = /*[[${module.id}]]*/ 0;
+
+    // deck — карточки, которые ещё предстоит показать в этом заходе
+    let deck = rawCards.map(c => ({ id: c.id, theme: c.theme, text: c.text }));
+    let totalInRun = deck.length;
+    let currentCard = null;
+    let isFlipped = false;
+    let isAnimating = false;
+
+    // итоговый результат по каждой карточке: id -> true (знаю) / false (не знаю)
+    // при повторных проходах по "незнакомым" статус карточки просто перезаписывается
+    const results = {};
+
+    const flashcardEl = document.getElementById('flashcard');
+    const frontTextEl = document.getElementById('cardFrontText');
+    const backTextEl = document.getElementById('cardBackText');
+    const counterEl = document.getElementById('studyCounter');
+    const progressFillEl = document.getElementById('progressFill');
+    const knownCountEl = document.getElementById('knownCount');
+    const unknownCountEl = document.getElementById('unknownCount');
+    const cardArea = document.getElementById('cardArea');
+    const summaryScreen = document.getElementById('summaryScreen');
+
+    function countKnown() {
+        return Object.values(results).filter(v => v === true).length;
+    }
+
+    function countUnknown() {
+        return Object.values(results).filter(v => v === false).length;
+    }
+
+    function updateStatusCounters() {
+        knownCountEl.textContent = countKnown();
+        unknownCountEl.textContent = countUnknown();
+    }
+
+    function renderCurrentCard() {
+        if (deck.length === 0) {
+            showSummary();
+            return;
+        }
+        currentCard = deck[0];
+        isFlipped = false;
+        flashcardEl.classList.remove('flipped', 'swipe-know', 'swipe-unknown');
+        frontTextEl.textContent = currentCard.theme;
+        backTextEl.textContent = currentCard.text;
+
+        const doneCount = totalInRun - deck.length;
+        counterEl.textContent = (doneCount + 1) + ' / ' + totalInRun;
+        progressFillEl.style.width = (totalInRun === 0 ? 0 : (doneCount / totalInRun) * 100) + '%';
+        updateStatusCounters();
+    }
+
+    function flipCard() {
+        if (isAnimating || !currentCard) return;
+        isFlipped = !isFlipped;
+        flashcardEl.classList.toggle('flipped', isFlipped);
+    }
+
+    function markCard(known) {
+        if (isAnimating || !currentCard) return;
+        isAnimating = true;
+
+        results[currentCard.id] = known;
+        flashcardEl.classList.add(known ? 'swipe-know' : 'swipe-unknown');
+
+        setTimeout(() => {
+            deck.shift();
+            isAnimating = false;
+            renderCurrentCard();
+        }, 380);
+    }
+
+    function showSummary() {
+        cardArea.style.display = 'none';
+        progressFillEl.style.width = '100%';
+        document.getElementById('summaryKnown').textContent = countKnown();
+        document.getElementById('summaryUnknown').textContent = countUnknown();
+
+        const repeatBtn = document.getElementById('repeatUnknownBtn');
+        repeatBtn.disabled = countUnknown() === 0;
+
+        summaryScreen.classList.add('active');
+    }
+
+    function repeatUnknown() {
+        const unknownIds = Object.keys(results)
+            .filter(id => results[id] === false)
+            .map(id => Number(id));
+
+        deck = rawCards
+            .filter(c => unknownIds.includes(c.id))
+            .map(c => ({ id: c.id, theme: c.theme, text: c.text }));
+
+        if (deck.length === 0) return;
+
+        totalInRun = deck.length;
+        summaryScreen.classList.remove('active');
+        cardArea.style.display = 'flex';
+        renderCurrentCard();
+    }
+
+    async function finishStudy() {
+    // маппинг cardId -> "KNOWN" / "UNKNOWN" под структуру Map<Long, LearningStatus>
+    const resultMap = {};
+    Object.keys(results).forEach(id => {
+        resultMap[id] = results[id] ? 'KNOWN' : 'UNKNOWN';
+    });
+
+    const payload = {
+        moduleId: moduleId,
+        result: resultMap
+    };
+
+    try {
+        const response = await fetch('/api/module/' + moduleId + '/learn/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            window.location.href = '/module/' + moduleId;
+            return;
+        }
+    } catch (err) {
+        console.error('Не удалось сохранить результат изучения:', err);
+    }
+
+    // даже если сохранить не получилось — не блокируем пользователя
+    window.location.href = '/module/' + moduleId;
+}
+
+    document.addEventListener('keydown', function (e) {
+        if (summaryScreen.classList.contains('active')) return;
+        if (e.key === ' ' || e.code === 'Space') {
+            e.preventDefault();
+            flipCard();
+        } else if (e.key === 'ArrowLeft') {
+            markCard(false);
+        } else if (e.key === 'ArrowRight') {
+            markCard(true);
+        }
+    });
+
+    if (rawCards.length > 0) {
+        renderCurrentCard();
+    }
+</script>
+
+</body>
+</html>

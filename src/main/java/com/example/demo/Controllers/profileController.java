@@ -1,6 +1,6 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Model.User;
+import com.example.demo.Entity.UserPack.User;
 import com.example.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,8 +21,5 @@ public class profileController {
         model.addAttribute("user", user);
         return "profile";
     }
-
-
-
 
 }

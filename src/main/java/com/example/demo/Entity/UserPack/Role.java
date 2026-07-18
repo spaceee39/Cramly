@@ -1,4 +1,4 @@
-package com.example.demo.Model;
+package com.example.demo.Entity.UserPack;
 
 import jakarta.persistence.*;
 import org.jspecify.annotations.Nullable;

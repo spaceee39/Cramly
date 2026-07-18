@@ -1,5 +1,6 @@
-package com.example.demo.Model;
+package com.example.demo.Entity.UserPack;
 
+import com.example.demo.Entity.ServicePack.Module;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

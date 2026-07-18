@@ -14,10 +14,22 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Comfortaa', cursive;
             background-color: #ffffff;
             color: #000000;
+            /* Sticky footer: растягиваем body на всю высоту вьюпорта
+               и располагаем header/main/footer колонкой. main занимает
+               всё свободное место (flex: 1), поэтому footer всегда
+               внизу — либо у низа контента, либо у низа экрана,
+               если контента мало. */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
@@ -71,8 +83,11 @@
 
         main {
             max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
             padding: 60px 40px;
+            /* Занимает всё оставшееся пространство между header и footer */
+            flex: 1;
         }
 
         .page-header {
@@ -300,11 +315,14 @@
 
         footer {
             max-width: 1200px;
+            width: 100%;
             margin: 80px auto 40px;
             padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            /* Не даём footer сжиматься, даже если main пустой */
+            flex-shrink: 0;
         }
 
         .footer-left {

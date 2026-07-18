@@ -13,11 +13,17 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        body {
+        html, body {
+            height: 100%;
+        }
+                body {
             font-family: 'Comfortaa', cursive;
             background-color: #ffffff;
             color: #000000;
+            /* добавлено: */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
@@ -77,10 +83,12 @@
             display: inline-block;
         }
 
-        main {
+                main {
             max-width: 1200px;
+            width: 100%;          /* было без width */
             margin: 0 auto;
             padding: 60px 40px;
+            flex: 1;               /* добавлено — главное свойство */
         }
 
         .hero-section {
@@ -128,13 +136,15 @@
             object-fit: cover;
         }
 
-        footer {
+                footer {
             max-width: 1200px;
+            width: 100%;           /* добавлено, не обязательно, но лучше с центрированием */
             margin: 80px auto 40px;
             padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            flex-shrink: 0;        /* добавлено */
         }
 
         .footer-left {

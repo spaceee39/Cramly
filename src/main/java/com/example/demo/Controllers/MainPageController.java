@@ -1,7 +1,8 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Model.Module;
-import com.example.demo.Model.User;
+import com.example.demo.Entity.ServicePack.Module;
+import com.example.demo.Entity.Enums.Status;
+import com.example.demo.Entity.UserPack.User;
 import com.example.demo.Repository.CardRepository;
 import com.example.demo.Repository.ModuleRepository;
 import com.example.demo.Repository.UserRepository;
@@ -40,7 +41,7 @@ public class MainPageController {
 
     @GetMapping("/home/allModules")
     public String allModules(Model model){
-        model.addAttribute("publicModules", moduleRepository.findAll() );
+        model.addAttribute("publicModules", moduleRepository.findByStatus(Status.PUBLIC));
         return "allmodules";
     }
 
@@ -56,8 +57,5 @@ public class MainPageController {
         return "redirect:/home";
     }
 
-    /*@GetMapping("/home/module/${id}")
-    public String modulePage(){
-        return null;
-    }*/
+
 }
