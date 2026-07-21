@@ -62,8 +62,9 @@ public class ModuleController {
             if (mode.equals("cards")) {
                 model.addAttribute("module", module);
                 return "LearningFlashCards";
-            } else {
-                return "redirect:/home";
+            } else if(mode.equals("learning")){
+                model.addAttribute("module", module);
+                return "";
             }
         }
         return "error";
